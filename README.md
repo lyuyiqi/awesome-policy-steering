@@ -31,21 +31,21 @@ A few works span both layers; they appear under their primary mechanism with a n
 - [**Observing and Controlling Features in Vision-Language-Action Models**](https://arxiv.org/abs/2604.17880) (Buurmeijer et al., 2026) — Formalizes feature-observability and feature-controllability for VLAs; uses linear classifiers to observe features and minimal linear interventions (grounded in optimal control) to steer π₀.₅ and OpenVLA outputs while preserving closed-loop behavior.
 - [**DeLock: Breaking Lock-In — Preserving Steerability under Low-Data VLA Post-Training**](https://arxiv.org/abs/2602.10556) (Huang et al., 2026) — Identifies "lock-in": low-data SFT destroys the VLA's instruction-following steerability. Mitigation combines preserved visual grounding during training with test-time contrastive prompt guidance.
 
-### Observation interventions
+<!-- ### Observation interventions
 
-- [**BYOVLA: Run-time Observation Interventions Make Vision-Language-Action Models More Visually Robust**](https://arxiv.org/abs/2410.01971) (Hancock et al., ICRA 2025) — VLM identifies task-irrelevant regions; sensitivity probes find regions the frozen VLA depends on; minimal image edits to the intersection. Black-box, recovers near-nominal performance under distractors on OpenVLA.
+- [**BYOVLA: Run-time Observation Interventions Make Vision-Language-Action Models More Visually Robust**](https://arxiv.org/abs/2410.01971) (Hancock et al., ICRA 2025) — VLM identifies task-irrelevant regions; sensitivity probes find regions the frozen VLA depends on; minimal image edits to the intersection. Black-box, recovers near-nominal performance under distractors on OpenVLA. -->
 
-### Decoding-time intervention on the VLM head
+<!-- ### Decoding-time intervention on the VLM head
 
-- [**PCD: Policy Contrastive Decoding for Robotic Foundation Models**](https://arxiv.org/abs/2505.13255) (Wu et al., ICLR 2026) — Contrasts action distributions from original observation vs. object-masked observation to suppress reliance on spurious visual cues. Training-free plug-in for autoregressive OpenVLA and (via KDE) diffusion-based Octo and π₀; +50.6% / +29.7% / +8.9% in simulation, +108% on real for π₀.
+- [**PCD: Policy Contrastive Decoding for Robotic Foundation Models**](https://arxiv.org/abs/2505.13255) (Wu et al., ICLR 2026) — Contrasts action distributions from original observation vs. object-masked observation to suppress reliance on spurious visual cues. Training-free plug-in for autoregressive OpenVLA and (via KDE) diffusion-based Octo and π₀; +50.6% / +29.7% / +8.9% in simulation, +108% on real for π₀. -->
 
 ### Foresight / subgoal conditioning at inference
 
 - [**ForeAct: Foresight-Guided Action Steering**](https://arxiv.org/abs/2602.12322) (2026) — Fast (0.33s) foresight image generator plus a VLM subtask describer steers frozen π₀ at every step. +40.9% over the base VLA.
 
-### Retrieval-augmented prompting at inference
+<!-- ### Retrieval-augmented prompting at inference
 
-- [**MAP-VLA: Memory-Augmented Prompting for VLA**](https://arxiv.org/abs/2511.09516) — Retrieves demonstration-derived prompt tokens at inference — effectively inference-time prompt tuning of a frozen VLA.
+- [**MAP-VLA: Memory-Augmented Prompting for VLA**](https://arxiv.org/abs/2511.09516) — Retrieves demonstration-derived prompt tokens at inference — effectively inference-time prompt tuning of a frozen VLA. -->
 
 ---
 
@@ -56,27 +56,27 @@ A few works span both layers; they appear under their primary mechanism with a n
 - [**VLS: Steering Pretrained Robot Policies via Vision-Language Models**](https://arxiv.org/abs/2602.03973) (Liu et al., 2026) — VLM grounds OOD observation–language pairs into keypoints and stage-wise differentiable programmatic rewards; injects gradients into denoising plus Feynman-Kac particle resampling with RBF repulsion. +31% CALVIN, +13% LIBERO-PRO; Franka real-robot deployment on VLA backbones.
 - [**VLA-Pilot: Plug-and-Play Inference-Time VLA Policy Steering via Embodied Evolutionary Diffusion**](https://arxiv.org/abs/2511.14178) (Li et al., 2025) — Embodied Policy Steering Chain-of-Thought (MLLM as open-world verifier) + Evolutionary Diffusion (mutation–selection in the VLA's noise space) + iterative refinement. Zero finetuning, cross-embodiment; ~+31% over base VLAs.
 - [**ProgressVLA: Progress-Guided Diffusion Policy for Vision-Language Robotic Manipulation**](https://arxiv.org/abs/2601.20239) (Yan et al., 2026) — Pretrained progress estimator + inverse-dynamics world model + classifier-style progress guidance in the VLA's latent action space. Also distills guided targets back into the denoiser, transitioning external guidance into internal capability.
-- [**TAG: Target-Aware Guidance for Vision-Language-Action Models**](https://arxiv.org/abs/2602.22056) (2026) — Classifier-free-guidance-style dual branches on original obs and an object-erased counterfactual obs; the residual steers the VLA toward target evidence. π₀.₅: 95.2 → 97.9 on LIBERO; reduces near-miss / wrong-object errors on LIBERO-Plus and VLABench.
+<!-- - [**TAG: Target-Aware Guidance for Vision-Language-Action Models**](https://arxiv.org/abs/2602.22056) (2026) — Classifier-free-guidance-style dual branches on original obs and an object-erased counterfactual obs; the residual steers the VLA toward target evidence. π₀.₅: 95.2 → 97.9 on LIBERO; reduces near-miss / wrong-object errors on LIBERO-Plus and VLABench. -->
 
 ### Verifier-based selection (Best-of-N / re-ranking)
 
 - [**V-GPS: Steering Your Generalists — Improving Robotic Foundation Models via Value Guidance**](https://arxiv.org/abs/2410.13816) (Nakamoto et al., CoRL 2024) — Language-conditioned Cal-QL value function re-ranks actions from any generalist VLA (Octo, RT-1-X, OpenVLA, etc.); 5 policies × 12 tasks, ~1.28–1.59× single-step overhead. Canonical advantage-weighted regression at inference.
 - [**RoVer: Robot Reward Model as Test-Time Verifier for Vision-Language-Action Models**](https://arxiv.org/abs/2510.10975) (Dai et al., 2025) — Process Reward Model returns scalar score *and* an action-space direction; caches perception features across candidates for efficient test-time scaling of VLAs.
-- [**Do What You Say: Steering Vision-Language-Action Models via Runtime Reasoning-Action Alignment**](https://arxiv.org/abs/2509.18130) (Wu et al., 2025) — VLM-generated chain-of-thought acts as both target plan and verifier, filtering action trajectories inconsistent with the spoken plan.
-- [**When to Act, Ask, or Learn: Uncertainty-Aware Policy Steering**](https://arxiv.org/abs/2602.22474) (Yuan, Wu, Bajcsy, 2026) — Conformal-prediction calibration of a VLM verifier on top of a base VLA; decides between executing, asking for clarification, or requesting an intervention. Addresses the miscalibration that breaks naive VLM-as-verifier setups.
-- [**VGAS: Value-Guided Action-Chunk Selection for Few-Shot Vision-Language-Action Adaptation**](https://arxiv.org/abs/2602.07399) (Xu et al., 2026) — Inference-time best-of-N over action chunks using a geometrically grounded Q-Chunk-Former critic, with explicit geometric regularization for near-miss disambiguation.
+- [**Do What You Say: Steering Vision-Language-Action Models via Runtime Reasoning-Action Alignment**](https://arxiv.org/abs/2510.16281) (Wu et al., 2025) — VLM-generated chain-of-thought acts as both target plan and verifier, filtering action trajectories inconsistent with the spoken plan.
+<!-- - [**When to Act, Ask, or Learn: Uncertainty-Aware Policy Steering**](https://arxiv.org/abs/2602.22474) (Yuan, Wu, Bajcsy, 2026) — Conformal-prediction calibration of a VLM verifier on top of a base VLA; decides between executing, asking for clarification, or requesting an intervention. Addresses the miscalibration that breaks naive VLM-as-verifier setups. -->
+<!-- - [**VGAS: Value-Guided Action-Chunk Selection for Few-Shot Vision-Language-Action Adaptation**](https://arxiv.org/abs/2602.07399) (Xu et al., 2026) — Inference-time best-of-N over action chunks using a geometrically grounded Q-Chunk-Former critic, with explicit geometric regularization for near-miss disambiguation. -->
 - [**SITCOM: Scaling Inference-Time COMpute for VLAs**](https://arxiv.org/abs/2510.04041) (Saxena, Shah et al., 2025) — Endows any pretrained VLA with MPC-style model-based rollouts and reward-based trajectory ranking at test time.
 
 ### Latent-noise / initial-noise steering
 
-- [**DSRL: Steering Your Diffusion Policy with Latent Space Reinforcement Learning**](https://arxiv.org/abs/2506.15799) (Wagenmaker, Nakamoto et al., CoRL 2025) — Keeps the base diffusion policy frozen and learns an RL policy over its initial-noise latent. Black-box, low-dimensional, no backprop through denoising. Demonstrated on π₀ on real WidowX and Aloha hardware.
+<!-- - [**DSRL: Steering Your Diffusion Policy with Latent Space Reinforcement Learning**](https://arxiv.org/abs/2506.15799) (Wagenmaker, Nakamoto et al., CoRL 2025) — Keeps the base diffusion policy frozen and learns an RL policy over its initial-noise latent. Black-box, low-dimensional, no backprop through denoising. Demonstrated on π₀ on real WidowX and Aloha hardware. -->
 - [**USR: Unified Steering and Residual Refinement**](https://openreview.net/forum?id=DbBD2aT1OG) — Combines DSRL-style noise steering with a residual action correction, addressing the mode confinement of pure latent steering. Targets diffusion/flow VLAs.
-- [**OptimusVLA: Task Prior and Local Consistency Memory**](https://arxiv.org/abs/2602.20200) (2026) — Replaces isotropic initial noise with a retrieved task-prior plus a local-consistency memory term — memory-augmented noise-space initialization for VLA action experts.
+<!-- - [**OptimusVLA: Task Prior and Local Consistency Memory**](https://arxiv.org/abs/2602.20200) (2026) — Replaces isotropic initial noise with a retrieved task-prior plus a local-consistency memory term — memory-augmented noise-space initialization for VLA action experts. -->
 
-### Tree search / planning over actions
+<!-- ### Tree search / planning over actions
 
 - [**FORGE-Tree: Monte Carlo Tree Diffusion for Long-Horizon VLA**](https://arxiv.org/abs/2510.21744) (2025) — MCTD over long-horizon VLAs; partially denoises trajectory segments using frozen OpenVLA / Octo encoders. +13.4–17.2 pp on LIBERO.
-- [**Value Vision-Language-Action Planning & Search**](https://arxiv.org/abs/2601.00969) (Neary et al., 2026) — Extends test-time-compute techniques (CoT prompting, self-consistency, MCTS) from LLMs to VLAs to address reactive-execution failures.
+- [**Value Vision-Language-Action Planning & Search**](https://arxiv.org/abs/2601.00969) (Neary et al., 2026) — Extends test-time-compute techniques (CoT prompting, self-consistency, MCTS) from LLMs to VLAs to address reactive-execution failures. -->
 
 ---
 
