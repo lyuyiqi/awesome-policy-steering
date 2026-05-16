@@ -38,17 +38,13 @@ A few works span both layers; they appear under their primary mechanism with a n
 
 - [**PCD: Policy Contrastive Decoding for Robotic Foundation Models**](https://arxiv.org/abs/2505.13255) (Wu et al., ICLR 2026) — Contrasts action distributions from original observation vs. object-masked observation to suppress reliance on spurious visual cues. Training-free plug-in for autoregressive OpenVLA and (via KDE) diffusion-based Octo and π₀; +50.6% / +29.7% / +8.9% in simulation, +108% on real for π₀.
 
-### Goal / subgoal / chain-of-thought conditioning
+### Foresight / subgoal conditioning at inference
 
-- [**CoT-VLA: Visual Chain-of-Thought Reasoning for VLA Models**](https://arxiv.org/abs/2503.22020) (Zhao et al., 2025) — VLA autoregressively generates a future-image visual chain-of-thought, then attends to it for action prediction. A trained-in steering channel that is consumed at inference.
-- [**ECoT: Embodied Chain-of-Thought**](https://arxiv.org/abs/2407.08693) (Zawalski et al., 2024) — Text chain-of-thought (plan → subtask → bounding box → end-effector position → action) inserted into OpenVLA at inference; intermediate reasoning tokens can be edited to steer behavior.
 - [**ForeAct: Foresight-Guided Action Steering**](https://arxiv.org/abs/2602.12322) (2026) — Fast (0.33s) foresight image generator plus a VLM subtask describer steers frozen π₀ at every step. +40.9% over the base VLA.
 
-### Memory-augmented prompting
+### Retrieval-augmented prompting at inference
 
-- [**MemoryVLA: Perceptual-Cognitive Memory for VLA Models**](https://arxiv.org/abs/2508.19236) — Augments a VLA with perceptual + cognitive memory banks queried at inference; the VLA's context is reshaped by retrieval rather than retraining.
-- [**ReMem-VLA: Recurrent Dual-Level Memory for VLA**](https://arxiv.org/abs/2603.12942) (2026) — Recurrent dual-level memory queries supply long-horizon context to the VLA at inference.
-- [**MAP-VLA: Memory-Augmented Prompting for VLA**](https://arxiv.org/abs/2511.09516) — Retrieves demonstration-derived prompt tokens at inference — effectively inference-time prompt tuning of the VLA.
+- [**MAP-VLA: Memory-Augmented Prompting for VLA**](https://arxiv.org/abs/2511.09516) — Retrieves demonstration-derived prompt tokens at inference — effectively inference-time prompt tuning of a frozen VLA.
 
 ---
 
@@ -104,6 +100,7 @@ To keep the list focused on *VLA* steering, the following are excluded even thou
 - **Human-in-the-loop steering on non-VLA generative policies.** *ITPS* and *Yell At Your Robot* are foundational HITL steering work but were demonstrated on diffusion / hierarchical policies rather than on a VLA; their techniques are commonly imported into VLA settings but the original works are out of scope here.
 - **Subgoal / trajectory-conditioning methods on non-VLA goal-conditioned policies**, e.g. *SuSIE* and *RT-Trajectory*, where the steered policy is not a VLA.
 - **Foundational VLA architectures without a dedicated steering mechanism**: *RT-2*, *OpenVLA*, *Octo*, *π₀*, *π₀.₅*, *RDT-1B*. These are the *targets* of steering, not steering methods themselves.
+- **Trained-in reasoning or memory architectures whose "steering" is a model capability rather than an external intervention**: *CoT-VLA* and *ECoT* (chain-of-thought baked into the VLA via training), *MemoryVLA* and *ReMem-VLA* (memory-augmented VLA architectures requiring retraining). The runtime behavior is shaped by training, not by an inference-time controller acting on a frozen model.
 - **Online RL / fine-tuning methods that modify policy weights** during deployment, e.g. *Policy Decorator*, *FlowCorrect*, *VLA-RL*, *RobustVLA* — these cross the line from steering into adaptation.
 - **Generic CV diffusion / flow-matching guidance** (CFG, autoguidance, DPS, MPGD, DOODL, SVDD, FK Steering, ControlNet, Composable Diffusion, Particle Guidance, Restart Sampling, …) — important conceptual background, but not VLA work.
 
