@@ -1,4 +1,4 @@
-# Rudder
+# Awesome VLA Steering
 
 A curated list of papers on **inference-time steering of Vision-Language-Action (VLA) models**.
 

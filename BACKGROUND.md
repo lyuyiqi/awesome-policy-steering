@@ -1,6 +1,6 @@
 # Background & Related Work
 
-Papers excluded from the main [Rudder](./README.md) list because they fall outside *inference-time steering of a frozen VLA*, but provide essential context. Three categories:
+Papers excluded from the main [Awesome VLA Steering](./README.md) list because they fall outside *inference-time steering of a frozen VLA*, but provide essential context. Three categories:
 
 1. **Trained-in VLA reasoning / memory** — the "steering" is a capability baked into the VLA via training, not an external intervention applied at deployment.
 2. **Online VLA adaptation** — methods that modify policy weights (or add trainable modules updated online) during deployment, crossing from steering into adaptation.
