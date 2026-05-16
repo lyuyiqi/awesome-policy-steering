@@ -4,7 +4,7 @@ A curated list of papers on **inference-time steering of Vision-Language-Action 
 
 Steering here means: changing a (typically pretrained or frozen) VLA's behavior at deployment through prompts, context, internal-feature intervention, observation transforms, action re-ranking, denoising / flow guidance, latent-noise control, or memory — without standard end-to-end retraining.
 
-A paper is included only if it demonstrates its steering mechanism on a VLA (vision-language pretrained backbone driving action prediction — e.g. OpenVLA, Octo, RT-1-X, π₀, π₀.₅, π0.7) or is specifically designed for VLA architectures. Methods that steer only generic diffusion policies or visuomotor policies, even when conceptually similar, are listed in [What's Out of Scope](#whats-out-of-scope).
+A paper is included only if it demonstrates its steering mechanism on a VLA (vision-language pretrained backbone driving action prediction — e.g. OpenVLA, Octo, RT-1-X, π₀, π₀.₅, π0.7) or is specifically designed for VLA architectures. Methods that steer only generic diffusion policies or visuomotor policies appear under [Related Work](#related-work-steering-non-vla-policies); trained-in VLA reasoning / memory, online VLA adaptation, and generic CV diffusion guidance background are collected in [BACKGROUND.md](./BACKGROUND.md).
 
 Papers are split by **where the steering signal acts**:
 
@@ -19,7 +19,7 @@ A few works span both layers; they appear under their primary mechanism with a n
 - [Steering the Action Expert](#steering-the-action-expert-sampling--generation-layer)
 - [Native Steerability via Training-Time Design](#native-steerability-via-training-time-design)
 - [Related Work: Steering Non-VLA Policies](#related-work-steering-non-vla-policies)
-- [What's Out of Scope](#whats-out-of-scope)
+- [Background & related work in a separate file →](./BACKGROUND.md)
 
 ---
 
@@ -124,27 +124,6 @@ These methods are conceptually adjacent to VLA steering — many use the same ma
 
 ---
 
-## What's Out of Scope
-
-To keep the list focused on *VLA* steering, the following are excluded even though they often appear in adjacent reviews:
-
-- **Steering methods on non-VLA policies** — see [Related Work](#related-work-steering-non-vla-policies) above for the named papers, organized by category.
-- **Foundational VLA architectures without a dedicated steering mechanism**: *RT-2*, *OpenVLA*, *Octo*, *π₀*, *π₀.₅*, *RDT-1B*. These are the *targets* of steering, not steering methods themselves.
-- **Trained-in reasoning or memory architectures whose "steering" is a model capability rather than an external intervention**: *CoT-VLA* and *ECoT* (chain-of-thought baked into the VLA via training), *MemoryVLA* and *ReMem-VLA* (memory-augmented VLA architectures requiring retraining). The runtime behavior is shaped by training, not by an inference-time controller acting on a frozen model.
-- **Online RL / fine-tuning methods that modify policy weights** during deployment, e.g. *Policy Decorator*, *FlowCorrect*, *VLA-RL*, *RobustVLA* — these cross the line from steering into adaptation.
-- **Generic CV diffusion / flow-matching guidance** (CFG, autoguidance, DPS, MPGD, DOODL, SVDD, FK Steering, ControlNet, Composable Diffusion, Particle Guidance, Restart Sampling, …) — important conceptual background, but not VLA work.
-
-If you think a paper here belongs in or out of either category, open an issue or PR.
-
-## Contributing
-
-Pull requests welcome. When adding a paper:
-
-1. Verify the paper genuinely steers a VLA (vision-language pretrained backbone driving action prediction), not just a generic diffusion policy or visuomotor model.
-2. Place it under VLM-layer or action-expert-layer based on where the steering signal acts.
-3. Use the title as the linked text, pointing to the arXiv abstract page (or official venue page if no arXiv version exists).
-4. Provide a one- to two-sentence summary noting the steering mechanism and a headline result.
-
 ## License
 
-This list is released under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
+Released under the [MIT License](./LICENSE).
