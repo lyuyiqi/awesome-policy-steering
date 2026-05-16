@@ -24,15 +24,15 @@ A few works span both layers; they appear under their primary mechanism with a n
 
 ## Steering the VLM (semantic / representation layer)
 
-### Observation interventions
-
-- [**BYOVLA: Run-time Observation Interventions Make Vision-Language-Action Models More Visually Robust**](https://arxiv.org/abs/2410.01971) (Hancock et al., ICRA 2025) — VLM identifies task-irrelevant regions; sensitivity probes find regions the frozen VLA depends on; minimal image edits to the intersection. Black-box, recovers near-nominal performance under distractors on OpenVLA.
-
 ### Internal feature / activation steering
 
 - [**Mechanistic Interpretability for Steering Vision-Language-Action Models**](https://arxiv.org/abs/2509.00328) (Häon et al., CoRL 2025) — Projects FFN activations onto the token embedding basis to find sparse semantic directions (speed, direction, grasp) causally linked to action selection; activation steering at inference with no fine-tuning. Demonstrated on π₀ and OpenVLA, LIBERO and a UR5.
 - [**Observing and Controlling Features in Vision-Language-Action Models**](https://arxiv.org/abs/2604.17880) (Buurmeijer et al., 2026) — Formalizes feature-observability and feature-controllability for VLAs; uses linear classifiers to observe features and minimal linear interventions (grounded in optimal control) to steer π₀.₅ and OpenVLA outputs while preserving closed-loop behavior.
 - [**DeLock: Breaking Lock-In — Preserving Steerability under Low-Data VLA Post-Training**](https://arxiv.org/abs/2602.10556) (Huang et al., 2026) — Identifies "lock-in": low-data SFT destroys the VLA's instruction-following steerability. Mitigation combines preserved visual grounding during training with test-time contrastive prompt guidance.
+
+### Observation interventions
+
+- [**BYOVLA: Run-time Observation Interventions Make Vision-Language-Action Models More Visually Robust**](https://arxiv.org/abs/2410.01971) (Hancock et al., ICRA 2025) — VLM identifies task-irrelevant regions; sensitivity probes find regions the frozen VLA depends on; minimal image edits to the intersection. Black-box, recovers near-nominal performance under distractors on OpenVLA.
 
 ### Decoding-time intervention on the VLM head
 
@@ -50,6 +50,13 @@ A few works span both layers; they appear under their primary mechanism with a n
 
 ## Steering the Action Expert (sampling / generation layer)
 
+### VLM / programmatic-reward guidance in denoising
+
+- [**VLS: Steering Pretrained Robot Policies via Vision-Language Models**](https://arxiv.org/abs/2602.03973) (Liu et al., 2026) — VLM grounds OOD observation–language pairs into keypoints and stage-wise differentiable programmatic rewards; injects gradients into denoising plus Feynman-Kac particle resampling with RBF repulsion. +31% CALVIN, +13% LIBERO-PRO; Franka real-robot deployment on VLA backbones.
+- [**VLA-Pilot: Plug-and-Play Inference-Time VLA Policy Steering via Embodied Evolutionary Diffusion**](https://arxiv.org/abs/2511.14178) (Li et al., 2025) — Embodied Policy Steering Chain-of-Thought (MLLM as open-world verifier) + Evolutionary Diffusion (mutation–selection in the VLA's noise space) + iterative refinement. Zero finetuning, cross-embodiment; ~+31% over base VLAs.
+- [**ProgressVLA: Progress-Guided Diffusion Policy for Vision-Language Robotic Manipulation**](https://arxiv.org/abs/2601.20239) (Yan et al., 2026) — Pretrained progress estimator + inverse-dynamics world model + classifier-style progress guidance in the VLA's latent action space. Also distills guided targets back into the denoiser, transitioning external guidance into internal capability.
+- [**TAG: Target-Aware Guidance for Vision-Language-Action Models**](https://arxiv.org/abs/2602.22056) (2026) — Classifier-free-guidance-style dual branches on original obs and an object-erased counterfactual obs; the residual steers the VLA toward target evidence. π₀.₅: 95.2 → 97.9 on LIBERO; reduces near-miss / wrong-object errors on LIBERO-Plus and VLABench.
+
 ### Verifier-based selection (Best-of-N / re-ranking)
 
 - [**V-GPS: Steering Your Generalists — Improving Robotic Foundation Models via Value Guidance**](https://arxiv.org/abs/2410.13816) (Nakamoto et al., CoRL 2024) — Language-conditioned Cal-QL value function re-ranks actions from any generalist VLA (Octo, RT-1-X, OpenVLA, etc.); 5 policies × 12 tasks, ~1.28–1.59× single-step overhead. Canonical advantage-weighted regression at inference.
@@ -64,13 +71,6 @@ A few works span both layers; they appear under their primary mechanism with a n
 - [**DSRL: Steering Your Diffusion Policy with Latent Space Reinforcement Learning**](https://arxiv.org/abs/2506.15799) (Wagenmaker, Nakamoto et al., CoRL 2025) — Keeps the base diffusion policy frozen and learns an RL policy over its initial-noise latent. Black-box, low-dimensional, no backprop through denoising. Demonstrated on π₀ on real WidowX and Aloha hardware.
 - [**USR: Unified Steering and Residual Refinement**](https://openreview.net/forum?id=DbBD2aT1OG) — Combines DSRL-style noise steering with a residual action correction, addressing the mode confinement of pure latent steering. Targets diffusion/flow VLAs.
 - [**OptimusVLA: Task Prior and Local Consistency Memory**](https://arxiv.org/abs/2602.20200) (2026) — Replaces isotropic initial noise with a retrieved task-prior plus a local-consistency memory term — memory-augmented noise-space initialization for VLA action experts.
-
-### VLM / programmatic-reward guidance in denoising
-
-- [**VLS: Steering Pretrained Robot Policies via Vision-Language Models**](https://arxiv.org/abs/2602.03973) (Liu et al., 2026) — VLM grounds OOD observation–language pairs into keypoints and stage-wise differentiable programmatic rewards; injects gradients into denoising plus Feynman-Kac particle resampling with RBF repulsion. +31% CALVIN, +13% LIBERO-PRO; Franka real-robot deployment on VLA backbones.
-- [**VLA-Pilot: Plug-and-Play Inference-Time VLA Policy Steering via Embodied Evolutionary Diffusion**](https://arxiv.org/abs/2511.14178) (Li et al., 2025) — Embodied Policy Steering Chain-of-Thought (MLLM as open-world verifier) + Evolutionary Diffusion (mutation–selection in the VLA's noise space) + iterative refinement. Zero finetuning, cross-embodiment; ~+31% over base VLAs.
-- [**ProgressVLA: Progress-Guided Diffusion Policy for Vision-Language Robotic Manipulation**](https://arxiv.org/abs/2601.20239) (Yan et al., 2026) — Pretrained progress estimator + inverse-dynamics world model + classifier-style progress guidance in the VLA's latent action space. Also distills guided targets back into the denoiser, transitioning external guidance into internal capability.
-- [**TAG: Target-Aware Guidance for Vision-Language-Action Models**](https://arxiv.org/abs/2602.22056) (2026) — Classifier-free-guidance-style dual branches on original obs and an object-erased counterfactual obs; the residual steers the VLA toward target evidence. π₀.₅: 95.2 → 97.9 on LIBERO; reduces near-miss / wrong-object errors on LIBERO-Plus and VLABench.
 
 ### Tree search / planning over actions
 
