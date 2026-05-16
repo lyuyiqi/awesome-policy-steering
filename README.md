@@ -18,6 +18,7 @@ A few works span both layers; they appear under their primary mechanism with a n
 - [Steering the VLM](#steering-the-vlm-semantic--representation-layer)
 - [Steering the Action Expert](#steering-the-action-expert-sampling--generation-layer)
 - [Native Steerability via Training-Time Design](#native-steerability-via-training-time-design)
+- [Related Work: Steering Non-VLA Policies](#related-work-steering-non-vla-policies)
 - [What's Out of Scope](#whats-out-of-scope)
 
 ---
@@ -92,13 +93,42 @@ Not strictly inference-time, but the resulting VLA has a steering interface that
 
 ---
 
+## Related Work: Steering Non-VLA Policies
+
+These methods are conceptually adjacent to VLA steering — many use the same machinery (verifier re-ranking, classifier guidance, latent barriers, HITL, subgoal conditioning) — but were demonstrated on generic diffusion policies, visuomotor policies, or non-VLA goal-conditioned policies. Listed here as a reference index; they are *not* the focus of this list.
+
+### Diffusion / visuomotor policy steering (not VLA)
+
+- [**FOREWARN: From Foresight to Forethought — VLM-In-the-Loop Policy Steering via Latent Alignment**](https://arxiv.org/abs/2502.01828) (Wu et al., RSS 2025) — Decouples *foresight* (latent dynamics predicts future latent obs) from *forethought* (small VLM scores a textual "behavior narration" of the latent). ~3.7s/decision vs. VLM-Act's 22s. Demonstrated on diffusion policies.
+- [**UF-OPS: Update-Free On-Policy Steering via Verifiers**](https://arxiv.org/abs/2603.10282) (Attarian et al., 2026) — Verifiers trained from the policy's own deployed rollouts (successes + failures) steer black-box diffusion policies. +49% average over 5 real tasks.
+- [**VGD: Steering Diffusion Policies with Value-Guided Denoising**](https://openreview.net/forum?id=wrcTncImde) (NeurIPS 2025 workshop) — At each DDIM step, computes a one-step clean-action estimate x̂₀ and adds ∇ₐQ(s, x̂) to the predicted noise. Avoids backprop through the diffusion chain.
+- [**PPGuide: Performance-Predictor Guidance**](https://arxiv.org/abs/2603.10980) — Binary success classifier provides gradient signal to push samples away from failure modes.
+- [**DynaGuide: Steering Diffusion Policies with Active Dynamic Guidance**](https://arxiv.org/abs/2506.13922) (Du & Song, NeurIPS 2025) — Latent dynamics model over DINOv2 features supplies a log-sum-exp classifier-guidance signal. 70% steering success on CALVIN; 5.4× over goal-conditioning under weak goal descriptions.
+- [**LPB: Latent Policy Barrier**](https://arxiv.org/abs/2508.05941) — Latent dynamics defines a barrier function approximating expert support; rejects / projects candidates leaving the support. Essentially a learned-latent CBF.
+- [**LatentCBF: Latent Control Barrier Functions for Visuomotor Policies**](https://arxiv.org/abs/2511.18606) — Explicit, smooth, differentiable latent CBF; more permissive than least-restrictive filters.
+- [**GPC: Generative Predictive Control**](https://arxiv.org/abs/2502.00622) — Two modes: GPC-RANK (best-of-N in world model) and GPC-OPT (gradient refinement). MPC-with-foresight wrapper.
+- [**TouchGuide: Tactile-Guided Steering of Pretrained Visuomotor Policies**](https://arxiv.org/abs/2603.24584) — Tactile contact physics as classifier guidance for diffusion / flow policies. Visual coarse action → tactile-feasibility refinement.
+- [**TDP: Tree-Guided Diffusion Planner**](https://arxiv.org/abs/2508.21800) — Parent trajectories sampled with particle guidance (diversity); child sub-trajectories with gradient-guided denoising (exploitation). Bi-level explore / exploit.
+- [**ADPro: Action-Diffusion with Manifold-Projected Priors**](https://arxiv.org/abs/2508.06266) — Replaces isotropic noise with a manifold-projected, task-aware prior. Robotics analogue of CV's MPGD.
+
+### HITL steering on non-VLA generative policies
+
+- [**ITPS: Inference-Time Policy Steering through Human Interactions**](https://arxiv.org/abs/2411.16627) (Wang et al., ICRA 2025) — Foundational HITL paper. Six families: post-hoc perturbation, ranking, initialization, gradient-guided sampling, **stochastic sampling** (the winner — DDPM resampling from a conditional kernel), and biased prior. Stochastic sampling dominates the alignment-vs-OOD trade-off. Targets diffusion policies.
+- [**Yell at Your Robot: Improving On-the-Fly from Language Corrections**](https://arxiv.org/abs/2403.12910) (Shi et al., 2024) — Real-time language corrections to a hierarchical policy; corrections also stored for offline updates.
+- [**Steering Robots with Inference-Time Interactions**](https://arxiv.org/abs/2506.14287) (Wang) — Systematizes ITPS + PoCo-style composition + TAMI hard-mode classifiers.
+
+### Subgoal / trajectory conditioning on non-VLA goal-conditioned policies
+
+- [**SuSIE: Subgoal Synthesis via Image Editing**](https://arxiv.org/abs/2310.10639) (Black, Nakamoto et al.) — InstructPix2Pix edits the current obs into a subgoal image; a goal-conditioned low-level policy follows it. Frozen at deployment.
+- [**RT-Trajectory: Robotic Task Generalization via Hindsight Trajectory Sketches**](https://arxiv.org/abs/2311.01977) (DeepMind, ICLR 2024) — Conditions RT-1 on 2D / 2.5D trajectory sketches from humans, generators, or planners. "Sketch as prompt."
+
+---
+
 ## What's Out of Scope
 
 To keep the list focused on *VLA* steering, the following are excluded even though they often appear in adjacent reviews:
 
-- **Steering methods demonstrated only on generic diffusion policies or visuomotor policies, not on a VLA backbone.** Examples: *FOREWARN* (foresight–forethought on diffusion policies), *UF-OPS* (verifier on deployed rollouts), *VGD* (value-guided denoising), *DynaGuide* (latent-dynamics classifier guidance on CALVIN diffusion policies), *LPB* / *LatentCBF* (latent barrier functions on visuomotor policies), *GPC* (generative predictive control), *TDP* (tree-guided diffusion planner), *TouchGuide* (tactile guidance of visuomotor policies), *ADPro* (manifold-projected priors), *PPGuide*.
-- **Human-in-the-loop steering on non-VLA generative policies.** *ITPS* and *Yell At Your Robot* are foundational HITL steering work but were demonstrated on diffusion / hierarchical policies rather than on a VLA; their techniques are commonly imported into VLA settings but the original works are out of scope here.
-- **Subgoal / trajectory-conditioning methods on non-VLA goal-conditioned policies**, e.g. *SuSIE* and *RT-Trajectory*, where the steered policy is not a VLA.
+- **Steering methods on non-VLA policies** — see [Related Work](#related-work-steering-non-vla-policies) above for the named papers, organized by category.
 - **Foundational VLA architectures without a dedicated steering mechanism**: *RT-2*, *OpenVLA*, *Octo*, *π₀*, *π₀.₅*, *RDT-1B*. These are the *targets* of steering, not steering methods themselves.
 - **Trained-in reasoning or memory architectures whose "steering" is a model capability rather than an external intervention**: *CoT-VLA* and *ECoT* (chain-of-thought baked into the VLA via training), *MemoryVLA* and *ReMem-VLA* (memory-augmented VLA architectures requiring retraining). The runtime behavior is shaped by training, not by an inference-time controller acting on a frozen model.
 - **Online RL / fine-tuning methods that modify policy weights** during deployment, e.g. *Policy Decorator*, *FlowCorrect*, *VLA-RL*, *RobustVLA* — these cross the line from steering into adaptation.
